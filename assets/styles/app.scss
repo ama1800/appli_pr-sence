@@ -1,0 +1,7 @@
+body {
+    background-color: rgb(218, 165, 32, 0.1);
+}
+.example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+.example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/_variables.scss';

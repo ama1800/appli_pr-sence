@@ -1,5 +1,8 @@
 const Encore = require('@symfony/webpack-encore');
-
+const path = require('path')
+const glob = require('glob-all')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PurgeCSSPlugin = require('purgecss-webpack-plugin')
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -57,7 +60,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -71,6 +74,14 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+      .addPlugin(new PurgeCSSPlugin({
+        paths: glob.sync([
+            path.join(__dirname, 'templates/**/*.html.twig')
+        ]),
+        content: ["**/*.twig"],
+        defaultExtractor: (content) => {
+            return content.match(/[\w-/:]+(?<!:)/g) || [];
+        }
+    }))
 ;
-
 module.exports = Encore.getWebpackConfig();
