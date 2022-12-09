@@ -18,7 +18,7 @@ class StudentFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        $roles = ['ROLE_Student', 'ROLE_delegate'];
+        $roles = ['ROLE_STUDENT', 'ROLE_delegate'];
         $j = 0;
         for ($i = 0; $i < 250; $i++) {
             $student = (new Student())
@@ -29,7 +29,7 @@ class StudentFixtures extends Fixture
             $password = $this->encoder->hashPassword($student, '123456789');
             $student->setPassword($password);
 
-            if ($i == 0 && $i == $j+20) {
+            if ($i == 0 || $i == $j+20) {
                 $student->setRoles([$roles[1]]);
             } else {
 
@@ -37,8 +37,6 @@ class StudentFixtures extends Fixture
             }
             $manager->persist($student);
         }
-
-
         $manager->flush();
     }
 }

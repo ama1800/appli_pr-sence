@@ -35,6 +35,10 @@ class Draw
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'draw')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Student $student = null;
+
     #[PrePersist]
     public function PrePersist()
     {
@@ -96,5 +100,17 @@ class Draw
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(?Student $student): self
+    {
+        $this->student = $student;
+
+        return $this;
     }
 }

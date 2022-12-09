@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SheetRepository;
 use Doctrine\ORM\Mapping\PreUpdate;
@@ -34,6 +36,18 @@ class Sheet
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'sheet', targetEntity: Signature::class, orphanRemoval: true)]
+    private Collection $signatures;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Draw $draw_sheet = null;
+
+    public function __construct()
+    {
+        $this->signatures = new ArrayCollection();
+    }
 
     #[PrePersist]
     public function PrePersist()
@@ -96,5 +110,47 @@ class Sheet
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection<int, Signature>
+     */
+    public function getSignatures(): Collection
+    {
+        return $this->signatures;
+    }
+
+    public function addSignature(Signature $signature): self
+    {
+        if (!$this->signatures->contains($signature)) {
+            $this->signatures->add($signature);
+            $signature->setSheet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSignature(Signature $signature): self
+    {
+        if ($this->signatures->removeElement($signature)) {
+            // set the owning side to null (unless already changed)
+            if ($signature->getSheet() === $this) {
+                $signature->setSheet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDrawSheet(): ?Draw
+    {
+        return $this->draw_sheet;
+    }
+
+    public function setDrawSheet(Draw $draw_sheet): self
+    {
+        $this->draw_sheet = $draw_sheet;
+
+        return $this;
     }
 }

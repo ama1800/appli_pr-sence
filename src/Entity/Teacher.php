@@ -8,6 +8,6 @@ use App\Repository\TeatcherRepository;
 
 #[ORM\Entity(repositoryClass: TeatcherRepository::class)]
 #[ApiResource]
-class Teatcher extends User
+class Teacher extends User
 {
 }

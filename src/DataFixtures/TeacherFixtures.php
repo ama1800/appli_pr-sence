@@ -18,7 +18,7 @@ class TeacherFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        $roles = ['ROLE_Teatcher', 'ROLE_GERANT', 'ROLE_ADMIN'];
+        $roles = ['ROLE_TEACHER', 'ROLE_GERANT'];
         for ($i = 0; $i < 25; $i++) {
             $teatcher = (new Teatcher())
                 ->setFirstName($faker->firstname())
@@ -32,7 +32,7 @@ class TeacherFixtures extends Fixture
                 $teatcher->setRoles(['ROLE_SUPER_ADMIN']);
             } else {
 
-                $teatcher->setRoles([$roles[rand(0, 2)]]);
+                $teatcher->setRoles([$roles[rand(0, 1)]]);
             }
             $manager->persist($teatcher);
         }

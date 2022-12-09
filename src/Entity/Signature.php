@@ -26,6 +26,16 @@ class Signature
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
+    #[ORM\ManyToOne(inversedBy: 'signed')]
+    private ?Student $student = null;
+
+    #[ORM\ManyToOne(inversedBy: 'signed')]
+    private ?Teacher $teacher = null;
+
+    #[ORM\ManyToOne(inversedBy: 'signatures')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Sheet $sheet = null;
+
     #[PrePersist]
     public function PrePersist()
     {
@@ -50,6 +60,42 @@ class Signature
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(?Student $student): self
+    {
+        $this->student = $student;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?Teacher
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?Teacher $teacher): self
+    {
+        $this->teacher = $teacher;
+
+        return $this;
+    }
+
+    public function getSheet(): ?Sheet
+    {
+        return $this->sheet;
+    }
+
+    public function setSheet(?Sheet $sheet): self
+    {
+        $this->sheet = $sheet;
 
         return $this;
     }

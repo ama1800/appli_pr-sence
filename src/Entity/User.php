@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use DateTimeImmutable;
+use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\PreUpdate;
 use Doctrine\ORM\Mapping\PrePersist;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
@@ -15,9 +17,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[InheritanceType('SINGLE_TABLE')]
-#[DiscriminatorMap(['teatcher' => Teatcher::class, 'student' => Student::class])]
+#[DiscriminatorMap(['teacher' => Teacher::class, 'student' => Student::class])]
 #[HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
