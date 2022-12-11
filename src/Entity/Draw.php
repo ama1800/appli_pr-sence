@@ -39,6 +39,10 @@ class Draw
     #[ORM\JoinColumn(nullable: false)]
     private ?Student $student = null;
 
+    #[ORM\OneToOne(inversedBy: 'draw', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Sheet $sheet = null;
+
     #[PrePersist]
     public function PrePersist()
     {
@@ -110,6 +114,18 @@ class Draw
     public function setStudent(?Student $student): self
     {
         $this->student = $student;
+
+        return $this;
+    }
+
+    public function getSheet(): ?Sheet
+    {
+        return $this->sheet;
+    }
+
+    public function setSheet(Sheet $sheet): self
+    {
+        $this->sheet = $sheet;
 
         return $this;
     }

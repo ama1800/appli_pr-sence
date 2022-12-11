@@ -2,16 +2,9 @@
 
 namespace App\Entity;
 
-use DateTimeImmutable;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\PrePersist;
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SignatureRepository;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping as ORM;
 
-#[HasLifecycleCallbacks]
-#[ApiResource]
 #[ORM\Entity(repositoryClass: SignatureRepository::class)]
 class Signature
 {
@@ -23,24 +16,14 @@ class Signature
     #[ORM\Column]
     private ?\DateTimeImmutable $signedAt = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\ManyToOne(inversedBy: 'signed')]
-    private ?Student $student = null;
-
-    #[ORM\ManyToOne(inversedBy: 'signed')]
-    private ?Teacher $teacher = null;
+    #[ORM\ManyToOne(inversedBy: 'presents')]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'signatures')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Sheet $sheet = null;
-
-    #[PrePersist]
-    public function PrePersist()
-    {
-        $this->signedAt = new DateTimeImmutable();
-    }
+    private ?Presence $presence = null;
 
     public function getId(): ?int
     {
@@ -50,6 +33,13 @@ class Signature
     public function getSignedAt(): ?\DateTimeImmutable
     {
         return $this->signedAt;
+    }
+
+    public function setSignedAt(\DateTimeImmutable $signedAt): self
+    {
+        $this->signedAt = $signedAt;
+
+        return $this;
     }
 
     public function getComment(): ?string
@@ -64,38 +54,26 @@ class Signature
         return $this;
     }
 
-    public function getStudent(): ?Student
+    public function getUser(): ?User
     {
-        return $this->student;
+        return $this->user;
     }
 
-    public function setStudent(?Student $student): self
+    public function setUser(?User $user): self
     {
-        $this->student = $student;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getTeacher(): ?Teacher
+    public function getPresence(): ?Presence
     {
-        return $this->teacher;
+        return $this->presence;
     }
 
-    public function setTeacher(?Teacher $teacher): self
+    public function setPresence(?Presence $presence): self
     {
-        $this->teacher = $teacher;
-
-        return $this;
-    }
-
-    public function getSheet(): ?Sheet
-    {
-        return $this->sheet;
-    }
-
-    public function setSheet(?Sheet $sheet): self
-    {
-        $this->sheet = $sheet;
+        $this->presence = $presence;
 
         return $this;
     }

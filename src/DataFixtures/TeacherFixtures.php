@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Teatcher;
+use App\Entity\Teacher;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -20,7 +20,7 @@ class TeacherFixtures extends Fixture
         $faker = Factory::create('fr_FR');
         $roles = ['ROLE_TEACHER', 'ROLE_GERANT'];
         for ($i = 0; $i < 25; $i++) {
-            $teatcher = (new Teatcher())
+            $teatcher = (new Teacher())
                 ->setFirstName($faker->firstname())
                 ->setLastName($faker->lastname())
                 ->setPhone($faker->mobileNumber())

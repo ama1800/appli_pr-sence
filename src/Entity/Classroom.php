@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use DateTimeImmutable;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,10 +23,10 @@ class Classroom
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $startAt = null;
+    private ?\DateTime $startAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $endAt = null;
+    private ?\DateTime $endAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -40,21 +40,26 @@ class Classroom
     #[ORM\OneToMany(mappedBy: 'classroom', targetEntity: Student::class)]
     private Collection $students;
 
+    #[ORM\OneToMany(mappedBy: 'classroom', targetEntity: Animation::class)]
+    private Collection $animations;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
+        $this->animations = new ArrayCollection();
     }
 
     #[PrePersist]
     public function PrePersist()
     {
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[PreUpdate]
     public function PreUpdate()
     {
-        $this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
 
@@ -63,7 +68,7 @@ class Classroom
         return $this->id;
     }
 
-    public function getStartAt(): ?DateTimeImmutable
+    public function getStartAt(): ?\DateTimeImmutable
     {
         return $this->startAt;
     }
@@ -133,6 +138,36 @@ class Classroom
             // set the owning side to null (unless already changed)
             if ($student->getClassroom() === $this) {
                 $student->setClassroom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Animation>
+     */
+    public function getAnimations(): Collection
+    {
+        return $this->animations;
+    }
+
+    public function addAnimation(Animation $animation): self
+    {
+        if (!$this->animations->contains($animation)) {
+            $this->animations->add($animation);
+            $animation->setClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimation(Animation $animation): self
+    {
+        if ($this->animations->removeElement($animation)) {
+            // set the owning side to null (unless already changed)
+            if ($animation->getClassroom() === $this) {
+                $animation->setClassroom(null);
             }
         }
 

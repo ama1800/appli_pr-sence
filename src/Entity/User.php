@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use ApiPlatform\Metadata\Get;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\PreUpdate;
@@ -59,6 +61,14 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Signature::class)]
+    private Collection $presence;
+
+    public function __construct()
+    {
+        $this->presence = new ArrayCollection();
+    }
 
     #[PrePersist]
     public function PrePersist()
@@ -186,5 +196,35 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection<int, Signature>
+     */
+    public function getPresence(): Collection
+    {
+        return $this->presence;
+    }
+
+    public function addPresence(Signature $presence): self
+    {
+        if (!$this->presence->contains($presence)) {
+            $this->presence->add($presence);
+            $presence->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresence(Signature $presence): self
+    {
+        if ($this->presence->removeElement($presence)) {
+            // set the owning side to null (unless already changed)
+            if ($presence->getUser() === $this) {
+                $presence->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

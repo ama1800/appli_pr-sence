@@ -37,17 +37,8 @@ class Sheet
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'sheet', targetEntity: Signature::class, orphanRemoval: true)]
-    private Collection $signatures;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Draw $draw_sheet = null;
-
-    public function __construct()
-    {
-        $this->signatures = new ArrayCollection();
-    }
+    #[ORM\OneToOne(mappedBy: 'sheet', cascade: ['persist', 'remove'])]
+    private ?Draw $draw = null;
 
     #[PrePersist]
     public function PrePersist()
@@ -112,44 +103,19 @@ class Sheet
         return $this->updatedAt;
     }
 
-    /**
-     * @return Collection<int, Signature>
-     */
-    public function getSignatures(): Collection
+    public function getDraw(): ?Draw
     {
-        return $this->signatures;
+        return $this->draw;
     }
 
-    public function addSignature(Signature $signature): self
+    public function setDraw(Draw $draw): self
     {
-        if (!$this->signatures->contains($signature)) {
-            $this->signatures->add($signature);
-            $signature->setSheet($this);
+        // set the owning side of the relation if necessary
+        if ($draw->getSheet() !== $this) {
+            $draw->setSheet($this);
         }
 
-        return $this;
-    }
-
-    public function removeSignature(Signature $signature): self
-    {
-        if ($this->signatures->removeElement($signature)) {
-            // set the owning side to null (unless already changed)
-            if ($signature->getSheet() === $this) {
-                $signature->setSheet(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getDrawSheet(): ?Draw
-    {
-        return $this->draw_sheet;
-    }
-
-    public function setDrawSheet(Draw $draw_sheet): self
-    {
-        $this->draw_sheet = $draw_sheet;
+        $this->draw = $draw;
 
         return $this;
     }
