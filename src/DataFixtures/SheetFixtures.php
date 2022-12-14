@@ -3,12 +3,11 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Classroom;
+use App\Entity\Sheet;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class ClassroomFixtures extends Fixture
+class SheetFixtures extends Fixture
 { 
     public function load(ObjectManager $manager)
     {
@@ -16,13 +15,12 @@ class ClassroomFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $dates = mt_rand(strtotime('2010-06-01'),strtotime('2023-12-31'));
             $date = date("Y-m-d", $dates);
-            $date1 = date("Y-m-d", $dates+35000000);
-            $classroom = (new Classroom())
-                ->setName($faker->firstname())
-                ->setStartAt( new \DateTime($date))
-                ->setEndAt( new \DateTime($date1))
+            $sheet= (new Sheet())
+                ->setWeek($i)
+                ->setStartAt(new \DateTime($date))
+                ->setEndAt($faker->dateTimeInInterval($date, '+5 days'))
             ;
-            $manager->persist($classroom);
+            $manager->persist($sheet);
         }
         $manager->flush();
     }

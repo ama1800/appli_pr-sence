@@ -12,9 +12,14 @@ use App\Repository\StudentRepository;
 #[ApiResource]
 class Student extends User
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
     #[ORM\ManyToOne(inversedBy: 'students')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Classroom $classroom = null;
+    protected ?Classroom $classroom = null;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Draw::class)]
     private Collection $draw;
@@ -22,6 +27,11 @@ class Student extends User
     public function __construct()
     {
         $this->draw = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getClassroom(): ?Classroom

@@ -6,12 +6,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\TeatcherRepository;
+use App\Repository\TeacherRepository;
 
-#[ORM\Entity(repositoryClass: TeatcherRepository::class)]
+#[ORM\Entity(repositoryClass: TeacherRepository::class)]
 #[ApiResource]
 class Teacher extends User
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Animation::class)]
     private Collection $animations;
 
@@ -19,6 +24,11 @@ class Teacher extends User
     {
         parent::__construct();
         $this->animations = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**

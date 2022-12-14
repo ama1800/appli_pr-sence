@@ -15,7 +15,7 @@ class Animation
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $classAt = null;
+    private ?\DateTime $classAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $skills = null;
@@ -24,23 +24,22 @@ class Animation
     private ?string $subject = null;
 
     #[ORM\ManyToOne(inversedBy: 'animations')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Teacher $teacher = null;
+    private ?Classroom $classroom = null;
 
     #[ORM\ManyToOne(inversedBy: 'animations')]
-    private ?Classroom $classroom = null;
+    private ?Teacher $teacher = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getClassAt(): ?\DateTimeImmutable
+    public function getClassAt(): ?\DateTime
     {
         return $this->classAt;
     }
 
-    public function setClassAt(\DateTimeImmutable $classAt): self
+    public function setClassAt(\DateTime $classAt): self
     {
         $this->classAt = $classAt;
 
@@ -71,18 +70,6 @@ class Animation
         return $this;
     }
 
-    public function getTeacher(): ?Teacher
-    {
-        return $this->teacher;
-    }
-
-    public function setTeacher(?Teacher $teacher): self
-    {
-        $this->teacher = $teacher;
-
-        return $this;
-    }
-
     public function getClassroom(): ?Classroom
     {
         return $this->classroom;
@@ -91,6 +78,18 @@ class Animation
     public function setClassroom(?Classroom $classroom): self
     {
         $this->classroom = $classroom;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?Teacher
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?Teacher $teacher): self
+    {
+        $this->teacher = $teacher;
 
         return $this;
     }

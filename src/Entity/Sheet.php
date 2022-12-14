@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SheetRepository;
 use Doctrine\ORM\Mapping\PreUpdate;
@@ -23,10 +21,10 @@ class Sheet
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $startAt = null;
+    private ?\DateTime $startAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $endAt = null;
+    private ?\DateTime $endAt = null;
 
     #[ORM\Column]
     private ?int $week = null;
@@ -43,7 +41,8 @@ class Sheet
     #[PrePersist]
     public function PrePersist()
     {
-        $this->createdAt = new DateTimeImmutable();
+        $this->ceatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     #[PreUpdate]
@@ -57,24 +56,24 @@ class Sheet
         return $this->id;
     }
 
-    public function getStartAt(): ?DateTimeImmutable
+    public function getStartAt(): ?\DateTime
     {
         return $this->startAt;
     }
 
-    public function setStartAt(\DateTimeImmutable $startAt): self
+    public function setStartAt(\DateTime $startAt): self
     {
         $this->startAt = $startAt;
 
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeImmutable
+    public function getEndAt(): ?\DateTime
     {
         return $this->endAt;
     }
 
-    public function setEndAt(\DateTimeImmutable $endAt): self
+    public function setEndAt(\DateTime $endAt): self
     {
         $this->endAt = $endAt;
 

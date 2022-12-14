@@ -21,10 +21,10 @@ class Draw
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $toSearchAt = null;
+    private ?\DateTime $toSearchAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $searchedAt = null;
+    private ?\DateTime $searchedAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $stepCount = null;
@@ -46,7 +46,8 @@ class Draw
     #[PrePersist]
     public function PrePersist()
     {
-        $this->createdAt = new DateTimeImmutable();
+        $this->ceatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     #[PreUpdate]

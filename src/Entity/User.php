@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[InheritanceType('SINGLE_TABLE')]
+#[InheritanceType('JOINED')]
 #[DiscriminatorMap(['teacher' => Teacher::class, 'student' => Student::class])]
 #[HasLifecycleCallbacks]
 #[ApiResource(
